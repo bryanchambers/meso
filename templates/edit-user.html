@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <form action='' method='post' class='form'>
+        <div class='form-group'>
+            <label class='input-label'>Display Name</label>
+
+            <input name='name' type='text' class='form-control' 
+                {% if user %}    
+                    value='{{ user.name }}'
+                {% endif %}
+            >
+        </div>
+
+        <div class='form-group'>
+            <label class='input-label'>Username</label>
+
+            <input name='username' type='text' class='form-control' 
+                {% if user %}    
+                    value='{{ user.username }}'
+                {% endif %}
+            >
+        </div>
+
+        <div class='text-center'>
+            <button name='submit' type='submit' class='btn btn-primary m-2'>Save</button>
+            <a class='btn btn-cancel m-2' href='/users'>Cancel</a>
+        </div>
+    </form>
+{% endblock %}

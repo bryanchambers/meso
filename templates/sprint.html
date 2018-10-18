@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div class='row mb-5'>
+        <div class='col text-center'>
+            {{ sprint.start.strftime('%a %-d %b %Y') }}&nbsp;&ndash;
+            {{ sprint.end.strftime('%a %-d %b %Y') }}&nbsp;&ndash;
+            {{ days_left }}d Left
+        </div>
+    </div>
+
+    <div class='row'>
+        {% for status in data %}
+
+            {% set status_loop = loop %}
+            <div class='col'>
+                <div class='text-center mb-4'>
+                    <span class='count badge badge-{{ status['color'] }}'>{{ status['count'] }}</span>
+                    <span class='status'>{{ status['status'] }}</span>
+                </div>
+                
+                {% for item in status['items'] %}
+                    {% if item.status == status['status'] %}
+
+                        <div class='card'>
+                            <div class='card-header text-center'>
+                                <span class="oi oi-pencil float-left invisible"></span>
+                                
+                                {% if item.assigned_to %} <strong>{{ item.assigned_to.name.split()[0] }}</strong> {% endif %}
+                                
+                                <a href='/items/{{ item.id }}/edit' class='float-right'>
+                                    <span class="oi oi-pencil" title='Edit Item'></span>
+                                </a>
+                            </div>
+
+                            <div class='card-body'>
+                                <div class='desc' title='{% if item.desc %}{{ item.desc|truncate(150) }}{% else %}No notes{% endif %}'>{{ item.name|truncate(150) }}</div>
+
+                                <div class='text-center mt-2'>
+                                    <a class='float-left {% if status_loop.index < 2 %} invisible {% endif %}' href='/items/{{ item.id }}/demote'>
+                                        <span class="oi oi-arrow-thick-left" title='{{ data[status_loop.index - 2]['status'] }}'></span>
+                                    </a>
+
+                                    <a href='/items/{{ item.id }}/backlog'><span class="oi oi-action-undo" title='Return to Backlog'></span></a>
+
+                                    <a class='float-right {% if status_loop.index > data|length - 1 %} invisible {% endif %}' href='/items/{{ item.id }}/promote'>
+                                        <span class="oi oi-arrow-thick-right" {% if status_loop.index < data|length %} title='{{ data[status_loop.index]['status'] }}' {% endif %}></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+        {% endfor %}
+    </div>
+
+{% endblock %}

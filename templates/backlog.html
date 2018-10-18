@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div id='table-wrapper'>
+        <div {% if items|length == 0 %} class='text-center' {% endif %}>
+            <a href='/backlog/new'><span class="oi oi-plus m-4" title='New Item'></span></a>
+        </div>
+
+        {% if items|length > 0 %}
+            <table class='table'>
+                <tr>
+                    <th>Name</th>
+                    <th class='text-center'>Created</th>
+                    <th class='text-center'>Created by</th>
+                    <th></th>
+                </tr>
+
+                {% for item in items %}
+                    <tr>
+                        <td title='{% if item.desc %}{{ item.desc|truncate(150) }}{% else %}No notes{% endif %}'>{{ item.name|truncate(100) }}</td>
+                        
+                        <td class='text-center'>{% if item.created %} {{ item.created.strftime('%m/%d/%Y') }} {% endif %}</td>
+                        <td class='text-center'>{% if item.created_by %} {{ item.created_by.name.split()[0] }} {% endif %}</td>
+
+                        <td style='width: 100px;'>
+                            <a href='/items/{{ item.id }}/activate'>
+                                <span class="oi oi-bolt mr-2" title='Move to selected sprint'></span>
+                            </a>
+
+                            <a href='/items/{{ item.id }}/edit'>
+                                <span class="oi oi-pencil mr-2" title='Edit'></span>
+                            </a>
+
+                            <a href='/items/{{ item.id }}/delete'>
+                                <span class="oi oi-trash" title='Delete'></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        {% else %}
+            <div id='no-data'>No items yet</div>
+        {% endif %}
+
+    </div>
+{% endblock %}

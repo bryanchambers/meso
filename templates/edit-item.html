@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <form action='' method='post' class='form'>
+        <div class='form-group'>
+            <label class='input-label'>Name</label>
+
+            <input name='name' type='text' class='form-control' 
+                {% if item %}    
+                    value='{{ item.name }}'
+                {% endif %}
+            >
+        </div>
+
+        <div class='form-group'>
+            <label class='input-label'>Sprint</label>
+
+            <select name='sprint' class='form-control'>
+                <option value=''>Backlog</option>
+                
+                {% for sprint in sprints %}
+                    <option value='{{ sprint.id }}' {% if item.sprint_id == sprint.id %} selected {% endif %}>{{ sprint.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class='form-group'>
+            <label class='input-label'>Assigned to</label>
+
+            <select name='user' class='form-control'>
+                <option value=''>Nobody</option>
+                
+                {% for user in users %}
+                    <option value='{{ user.id }}' {% if item.assigned_to_id == user.id %} selected {% endif %}>{{ user.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class='form-group'>
+            <label class='input-label'>Description</label>
+            
+            <textarea name='desc' type='text' class='form-control' rows='5'>{% if item.desc %} {{ item.desc }} {% endif %}</textarea>
+        </div>
+
+        <div class='text-center'>
+            <button name='submit' type='submit' class='btn btn-primary m-2'>Save</button>
+            <a class='btn btn-cancel m-2' href={% if item.sprint_id %}'/sprints/{{ item.sprint_id }}'{% else %}'/backlog'{% endif %}>Cancel</a>
+        </div>
+    </form>
+{% endblock %}

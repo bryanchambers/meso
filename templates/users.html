@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div id='table-wrapper'>
+        <div {% if users|length == 0 %} class='text-center' {% endif %}>
+            <a href='/users/new'><span class="oi oi-plus m-4" title='New User'></span></a>
+        </div>
+
+        {% if users|length > 0 %}
+            <table class='table'>
+                <tr class='text-center'>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Created</th>
+                    <th>Assigned</th>
+                    <th>Password</th>
+                    <th></th>
+                </tr>
+
+                {% for user in users %}
+                    <tr class='text-center'>
+                        <td>{{ user.name }}</td>
+                        <td class='text-center'>{{ user.username }}</td>
+                        <td class='text-center'>{{ user.created_items|length }}</td>
+                        <td class='text-center'>{{ user.assigned_items|length }}</td>
+                        <td class='text-center'>{{ user.temp_pw }}</td>
+
+                        <td style='width: 100px'>
+                            <a href='/users/{{ user.id }}/reset'>
+                                <span class="oi oi-reload mr-2" title='Reset Password'></span>
+                            </a>
+
+                            <a href='/users/{{ user.id }}/edit'>
+                                <span class="oi oi-pencil mr-2" title='Edit User'></span>
+                            </a>
+
+                            <a href='/users/{{ user.id }}/delete'>
+                                <span class="oi oi-trash" title='Delete User'></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div id='no-data'>No users yet</div>
+        {% endif %}
+    </div>
+{% endblock %}

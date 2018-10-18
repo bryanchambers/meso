@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	<form action='' method='post' class='form'>
+		<div class='form-group'>
+			<label class='input-label'>Name</label>
+
+			<input name='name' type='text' class='form-control' 
+				{% if item %}    
+					value='{{ item.name }}'
+				{% endif %}
+			>
+		</div>
+
+		<div class='form-group'>
+			<label class='input-label'>Description</label>
+			
+			<textarea name='desc' type='text' class='form-control' rows='5'>{% if item %}value='{{ item.desc }}'{% endif %}</textarea>
+		</div>
+
+		<div class='text-center'>
+			<button name='submit' type='submit' class='btn btn-primary m-2'>Save</button>
+			<a class='btn btn-cancel m-2' href='/backlog'>Cancel</a>
+		</div>
+	</form>
+{% endblock %}

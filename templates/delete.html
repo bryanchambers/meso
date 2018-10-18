@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div class='text-center'>
+        <p>Are you sure you want to delete this {{ type }}?</p>
+
+        <form action='' method='post'>
+            <button name='submit' type='submit' class='btn btn-danger m-2'>Delete</button>
+            <a class='btn btn-cancel m-2' href='{{ cancel }}'>Cancel</a>
+        </form>
+    </div>
+{% endblock %}

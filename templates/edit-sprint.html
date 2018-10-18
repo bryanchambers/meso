@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <form action='' method='post' class='form'>
+        <div class='form-group'>
+            <label class='input-label'>Name</label>
+
+            <input name='name' type='text' class='form-control' 
+                {% if sprint %}    
+                    value='{{ sprint.name }}'
+                {% endif %}
+            >
+        </div>
+
+        <div class='form-group'>
+            <label class='input-label'>Start Date</label>
+
+            <input name='start' type='date' class='form-control' 
+                {% if sprint %}
+                    value="{{ sprint.start.strftime('%Y-%m-%d') }}"
+                {% else %}
+                    value='{{ default_start }}'
+                {% endif %}
+            >
+        </div>
+
+        <div class='form-group'>
+            <label class='input-label'>End Date</label>
+
+            <input name='end' type='date' class='form-control' 
+                {% if sprint %}
+                    value="{{ sprint.end.strftime('%Y-%m-%d') }}"
+                {% else %}
+                    value='{{ default_end }}'
+                {% endif %}
+            >
+        </div>
+
+        <div class='form-group'>
+            <label class='input-label'>Description</label>
+            
+            <textarea name='desc' type='text' class='form-control' rows='3'>{% if sprint %}{{ sprint.desc }}{% endif %}</textarea>
+        </div>
+
+        <div class='text-center'>
+            <button name='submit' type='submit' class='btn btn-primary m-2'>Save</button>
+            <a class='btn btn-cancel m-2' href='/sprints'>Cancel</a>
+        </div>
+    </form>
+{% endblock %}

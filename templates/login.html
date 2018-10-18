@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <form action='' method='post' class='form'>
+        <div class='form-group'>
+            <label class='input-label'>Username</label>
+            <input name='username' type='text' class='form-control'>
+        </div>
+
+        <div class='form-group'>
+            <label class='input-label'>Password</label>
+            <input name='password' type='password' class='form-control'>
+        </div>
+
+        <div class='text-center'>
+            <button name='submit' type='submit' class='btn btn-primary'>Login</button>
+        </div>
+    </form>
+{% endblock %}

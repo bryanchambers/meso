@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div id='table-wrapper'>
+        <a href='/sprints/new'><span class="oi oi-plus m-4" title='New Sprint'></span></a>
+
+        <table class='table'>
+            <tr class='text-center'>
+                <th>Name</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Items</th>
+                <th>Desc</th>
+                <th></th>
+            </tr>
+
+            {% for sprint in sprints %}
+                <tr>
+                    <td><a href='/sprints/{{ sprint.id }}'>{{ sprint.name }}</a></td>
+                    <td class='text-center'>{{ sprint.start.strftime('%m/%d/%Y') }}</td>
+                    <td class='text-center'>{{ sprint.end.strftime('%m/%d/%Y') }}</td>
+                    <td class='text-center'>{{ sprint.items|length }}</td>
+                    <td>{% if sprint.desc %} {{ sprint.desc|truncate(70) }} {% endif %}</td>
+                    <td style='width: 80px'>
+                        <a href='/sprints/{{ sprint.id }}/edit'><span class="oi oi-pencil mr-3" title='Edit Sprint'></span></a>
+                        <a href='/sprints/{{ sprint.id }}/delete'><span class="oi oi-trash" title='Delete Sprint'></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+{% endblock %}
