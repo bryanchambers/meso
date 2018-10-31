@@ -18,14 +18,14 @@
         </div>
 
         <div id='menu-right'>
-            {% if 'user' in session %} <span style='position: relative; bottom: 2px; right: 5px; color: #999999; font-size: 14px;'>{{ session['user']['name'] }}</span> {% endif %}
+            {% if 'user' in session %} <span style='position: relative; bottom: 2px; right: 15px; color: #b3b3b3; font-size: 14px;'>{{ session['user']['name'] }}</span> {% endif %}
             <a href='/users'><span class="oi oi-people m-1" title='Users'></span></a>
             <a href='/profile'><span class="oi oi-person m-1" title='Profile'></span></a>
             <a href='/logout'><span class="oi oi-power-standby m-1" title='Logout'></span></a>
         </div>
         
         <div class='container-fluid' id='wrapper'>
-            <h2 id='title' class='text-center m-4'>{{ title }}</h2>
+            {% if title %} <h2 id='title' class='text-center m-4'>{{ title }}</h2> {% endif %}
             {% block body %}{% endblock %}
         </div>
     </body>

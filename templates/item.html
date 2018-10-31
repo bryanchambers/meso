@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div id='item' class='inner-wrapper'>
+
+        <div id='name'>
+            <a id='back' href='/sprints/{{ item.sprint.id }}' title='Back'><span class="oi oi-chevron-left"></span></a>
+            {{ item.name|truncate(150) }}
+            <a id='edit' href='/items/{{ item.id }}/edit' title='Edit'><span class="oi oi-pencil"></span></a>
+        </div>
+
+        <table id='details'>
+            <tr title="Created by {{ item.created_by.name }} on {{ item.created.strftime('%m/%d/%Y') }}">
+                <td class='label'>Assigned to</td>
+                <td class='value'>{{ item.assigned_to.name }}</td>
+            </tr>
+
+            <tr>
+                <td class='label'>Sprint</td>
+                <td class='value'>{% if item.sprint %} {{ item.sprint.name }} {% else %} Backlog {% endif %}</td>
+            </tr>
+
+            <tr>
+                <td class='label'>Status</td>
+                <td class='value text-{{ status_colors[item.status] }}'>{{ item.status }}</td>
+            </tr>
+        </table>
+        
+        {% if item.desc %}
+            <div id='desc'><div id='text'>{{ item.desc }}</div></div>
+        {% endif %}
+
+
+
+        <div id='comments'>
+            {% if comments.count() > 0 %} <div id='header'>Comments</div> {% endif %}
+
+            <div id='thread'>
+                {% for comment in comments %}
+                    <div class='info'>
+                        <span class='name text-primary'>{{ comment.created_by.name }}</span>
+                        <span class='date'>{{ comment.created.strftime('%m/%d/%Y %-I:%M%p').lower() }}</span>
+                    </div>
+
+                    <div class='text'>{{ comment.txt }}</div>
+                {% endfor %}
+            </div>
+
+            <form class='form' id='new' action='' method='post'>
+                <textarea name='comment' rows='3' class='form-control' placeholder='Add a comment'></textarea>
+                <button name='submit' type='submit' class='btn btn-primary float-right mt-3'>Save</button>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}
