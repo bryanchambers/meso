@@ -12,13 +12,13 @@
 	<body>
         <div id='menu-left'>
             <a href='/sprints/current'><span class="oi oi-home m-1" title='Current Sprint'></span></a>
-            <!-- <a href='/sprints/next'><span class="oi oi-clock m-1" title='Next Sprint' style='position: relative; top: 2px;'></span></a> -->
             <a href='/sprints'><span class="oi oi-spreadsheet m-1" title='All Sprints'></span></a>
             <a href='/backlog'><span class="oi oi-briefcase m-1" title='Backlog'></span></a>
+            {% if 'sprint' in session %} <span class='info'>{{ session['sprint']['name'] }}</span> {% endif %}
         </div>
 
         <div id='menu-right'>
-            {% if 'user' in session %} <span style='position: relative; bottom: 2px; right: 15px; color: #b3b3b3; font-size: 14px;'>{{ session['user']['name'] }}</span> {% endif %}
+            {% if 'user' in session %} <span class='info'>{{ session['user']['name'] }}</span> {% endif %}
             <a href='/users'><span class="oi oi-people m-1" title='Users'></span></a>
             <a href='/profile'><span class="oi oi-person m-1" title='Profile'></span></a>
             <a href='/logout'><span class="oi oi-power-standby m-1" title='Logout'></span></a>

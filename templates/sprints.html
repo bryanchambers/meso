@@ -6,6 +6,7 @@
 
         <table class='table'>
             <tr class='text-center'>
+                <th></th>
                 <th>Name</th>
                 <th>Start</th>
                 <th>End</th>
@@ -16,6 +17,7 @@
 
             {% for sprint in sprints %}
                 <tr>
+                    <td style='width: 30px'><a href='/sprints/{{ sprint.id }}/select'><span class="oi oi-bolt" title='Select'></span></a></td>
                     <td><a href='/sprints/{{ sprint.id }}'>{{ sprint.name }}</a></td>
                     <td class='text-center'>{{ sprint.start.strftime('%m/%d/%Y') }}</td>
                     <td class='text-center'>{{ sprint.end.strftime('%m/%d/%Y') }}</td>
