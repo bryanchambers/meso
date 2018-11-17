@@ -1,5 +1,35 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <div></div>
+    <table id='details'>
+        <tr title="asdfasdf">
+            <td class='label'>Username</td>
+            <td class='value'>{{ user.username }}</td>
+        </tr>
+
+        <tr>
+            <td class='label'>Created</td>
+            <td class='value'>{{ user.created_items|length }}</td>
+        </tr>
+
+        <tr>
+            <td class='label'>Assigned</td>
+            <td class='value'>{{ user.assigned_items|length }}</td>
+        </tr>
+
+        <tr>
+            <td class='label'>Comments</td>
+            <td class='value'>{{ user.comments|length }}</td>
+        </tr>
+
+        <tr>
+            <td class='label'>Temp Password</td>
+            <td class='value'>{{ user.temp_pw }}</td>
+        </tr>
+    </table>
+
+    <div class='text-center'>
+        <a class='btn btn-primary m-2' href='users/{{ user.id }}/edit'>Edit Profile</a>
+        <a class='btn btn-danger m-2' href='users/{{ user.id }}/change'>Change Password</a>
+    </div>
 {% endblock %}

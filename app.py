@@ -26,6 +26,7 @@ class Sprint(db.Model):
     items = db.relationship('Item', backref='sprint', lazy=True)
 
 
+
 class Item(db.Model):
     id        = db.Column(db.Integer, primary_key=True)
     status    = db.Column(db.String(50))
@@ -37,12 +38,14 @@ class Item(db.Model):
     assigned_to_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
+
 class Comment(db.Model):
     id      = db.Column(db.Integer, primary_key=True)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
     txt     = db.Column(db.String(500))
     created = db.Column(db.DateTime)
     created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
 
 
 class User(db.Model):
@@ -60,9 +63,20 @@ class User(db.Model):
 
 
 
+
+
+
+
+
 @app.route('/')
 def home():
-    return redirect('/sprints/current')
+    url = '/sprints'
+
+    if 'sprint' in session:
+        id  = session['sprint']['id']
+        url = url + '/' + str(id)
+
+    return redirect(url)
 
 
 
@@ -70,7 +84,11 @@ def home():
 
 @app.before_request
 def check_user():
-    if 'user' not in session and request.endpoint != 'login':
+    if 'user' in session:
+        if 'change_pw' in session and request.endpoint not in ['change_password', 'logout']:
+            return redirect('users/' + str(session['user']['id']) + '/change')
+
+    elif request.endpoint != 'login':
         return redirect('/login')
 
 
@@ -79,8 +97,8 @@ def check_user():
 
 @app.route('/backlog')
 def backlog():
-	items = Item.query.filter_by(sprint_id=None).order_by(Item.created.desc()).all()
-	return render_template('backlog.html', title='Backlog', items=items)
+    items = Item.query.filter_by(sprint_id=None).order_by(Item.created.desc()).all()
+    return render_template('backlog.html', title='Backlog', items=items)
 
 
 
@@ -97,29 +115,19 @@ def new_item():
 
         if name:
             item = Item(
-                name=name,
-                status='Pending',
-                sprint_id=sprint_id,
-                created=datetime.utcnow(),
-                created_by_id=created_by_id,
-                assigned_to_id=assigned_to_id,
-                desc=desc
+                name = name,
+                status    = 'Pending',
+                sprint_id =  sprint_id,
+                created   =  datetime.utcnow(),
+                created_by_id = created_by_id,
+                assigned_to_id = assigned_to_id,
+                desc = desc
             )
             db.session.add(item)
             db.session.commit()
             return redirect('/backlog')
 
     return render_template('edit-item.html', title='New Item', sprints=Sprint.query.all(), users=User.query.all())
-
-
-
-
-
-@app.route('/sprints/current')
-def current():
-    sprint = Sprint.query.filter(Sprint.start <= datetime.now()).order_by(Sprint.start.desc()).first()
-    url    = '/sprints/' + str(sprint.id) if sprint else '/sprints' + id
-    return redirect(url)
 
 
 
@@ -200,6 +208,9 @@ def new_sprint():
     default_end   = default_end.strftime('%Y-%m-%d')
 
     return render_template('edit-sprint.html', title='New Sprint', default_start=default_start, default_end=default_end)
+
+
+
 
 
 def overlap(start, end):
@@ -293,16 +304,17 @@ def edit_item(id):
 
     if 'submit' in request.form:
         name    = request.form['name']
-        assigned_to_id = int(request.form['user']) if 'user' in request.form and request.form['user'] else None
-        sprint_id = int(request.form['sprint']) if 'sprint' in request.form and request.form['sprint'] else None
-        desc    = request.form['desc'] if request.form['desc'] else None
+        assigned_to_id = int(request.form['user'])   if 'user'   in request.form and request.form['user']   else None
+        sprint_id      = int(request.form['sprint']) if 'sprint' in request.form and request.form['sprint'] else None
+        desc = request.form['desc'] if request.form['desc'] else None
         
         if name:
-            item.name    = name
+            item.name = name
             item.assigned_to_id = assigned_to_id
-            redirect_url = '/sprints/' + str(item.sprint_id) if item.sprint_id else '/backlog'
+            redirect_url   = '/sprints/' + str(item.sprint_id) if item.sprint_id else '/backlog'
             item.sprint_id = sprint_id
-            item.desc    = desc
+            item.desc = desc
+
             db.session.commit()
             return redirect(redirect_url)
 
@@ -388,17 +400,20 @@ def login():
 
         if username: #and password:
             user = User.query.filter_by(username=username).first()
+            auth = False
 
             if user:
                 if user.temp_pw:
-                    if True: #password == user.temp_pw:
-                        session['user'] = { 'id': user.id, 'name': user.name, 'username': user.username }
-                        return redirect('/')
+                    if password == user.temp_pw: auth = True
 
                 elif user.password:
-                    if hash.pbkdf2_sha256.verify(password, user.password):
-                        session['user'] = { 'id': user.id, 'name': user.name, 'username': user.username }
-                        return redirect('/')
+                    if hash.pbkdf2_sha256.verify(password, user.password): auth = True
+            
+            if auth:
+                session['user'] = { 'id': user.id, 'name': user.name, 'username': user.username }
+                if user.temp_pw: session['change_pw'] = True 
+
+                return redirect('/')
 
     if 'user' in session: session.pop('user')
     return render_template('login.html', title='Login')
@@ -418,7 +433,8 @@ def logout():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html', title=session['user']['name'])
+    user = User.query.get(session['user']['id'])
+    return render_template('profile.html', title=session['user']['name'], user=user)
 
 
 
@@ -456,6 +472,72 @@ def reset_password(id):
     db.session.commit()
 
     return redirect('/users')
+
+
+
+
+
+@app.route('/users/<int:id>/change', methods=['GET', 'POST'])
+def change_password(id):
+    user = User.query.get(id)
+
+    if 'submit' in request.form:
+        old_pw = request.form['old'].strip() if request.form['old'] else None 
+        new_pw = request.form['new'].strip() if request.form['new'] else None
+
+        auth = False
+
+        if old_pw and new_pw:
+            if user.temp_pw:
+                if old_pw == user.temp_pw: auth = True
+            elif user.password:
+                if hash.pbkdf2_sha256.verify(old_pw, user.password): auth = True
+
+        if auth:
+            if valid_password(new_pw):
+                user.password = hash.pbkdf2_sha256.encrypt(new_pw)
+                user.temp_pw  = None
+                if 'change_pw' in session: del session['change_pw']
+
+                db.session.commit()
+                return redirect('/profile')
+
+    return render_template('change-pw.html', title='Change Password', user=user)
+
+
+
+
+
+def valid_password(pw):
+    letters = 'abcdefghijklmnopqrstuvwxyz'
+    numbers = '01234656789'
+    symbols = '!-@#$%^&*(=)?+'
+
+    min_len = 6
+    max_len = 20
+    min_ltr = 1
+    min_num = 1
+    min_sym = 0
+
+    n_ltr = 0
+    n_num = 0
+    n_sym = 0
+
+    for ch in pw.lower():
+        if ch in letters: n_ltr = n_ltr + 1
+        if ch in numbers: n_num = n_num + 1
+        if ch in symbols: n_sym = n_sym + 1
+
+    length = len(pw)
+
+    r_len = True if length > min_len - 1 and length < max_len + 1 else False
+    r_ltr = True if n_ltr >= min_ltr else False
+    r_num = True if n_num >= min_num else False
+    r_sym = True if n_sym >= min_sym else False
+    r_chr = True if n_ltr + n_num + n_sym == length else False
+
+    result = True if r_len and r_ltr and r_num and r_sym and r_chr else False
+    return result
 
 
 

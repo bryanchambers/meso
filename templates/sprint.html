@@ -3,9 +3,14 @@
 {% block body %}
     <div class='row mb-5'>
         <div class='col text-center'>
-            {{ sprint.start.strftime('%a %-d %b %Y') }}&nbsp;&ndash;
+            {{ sprint.start.strftime('%a %-d %b %Y') }}<span class='text-secondary'> to</span>
             {{ sprint.end.strftime('%a %-d %b %Y') }}&nbsp;&ndash;
-            {{ days_left }}d Left
+
+            {% if days_left >= 0 %}
+                <span class='text-danger font-weight-bold'>{{ days_left }}d Left</span>
+            {% else %}
+                <span class='text-secondary font-weight-bold'>Closed {{ days_left * -1 }}d Ago</span>
+            {% endif %}
         </div>
     </div>
 
