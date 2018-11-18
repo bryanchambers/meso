@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+
 <html>
     <head>
         <!-- <link rel="shortcut icon" type='image/png' href="{{ url_for('static', filename='icon.png') }}"> -->
         <title>Meso</title>
+
         <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <link rel="stylesheet" href="/static/open-iconic-master/font/css/open-iconic-bootstrap.css">
@@ -15,16 +17,20 @@
             <a href='/'><span class="oi oi-home m-1" title='Selected Sprint'></span></a>
             <a href='/sprints'><span class="oi oi-spreadsheet m-1" title='All Sprints'></span></a>
             <a href='/backlog'><span class="oi oi-briefcase m-1" title='Backlog'></span></a>
+
             {% if 'sprint' in session %} <span class='info'>{{ session['sprint']['name'] }}</span> {% endif %}
         </div>
 
+
         <div id='menu-right'>
             {% if 'user' in session %} <span class='info'>{{ session['user']['name'] }}</span> {% endif %}
+
             <a href='/users'><span   class="oi oi-people m-1" title='Users'></span></a>
             <a href='/profile'><span class="oi oi-person m-1" title='Profile'></span></a>
             <a href='/logout'><span  class="oi oi-power-standby m-1" title='Logout'></span></a>
         </div>
-        
+
+
         <div class='container-fluid' id='wrapper'>
             {% if title %} <h2 id='title' class='text-center m-4'>{{ title }}</h2> {% endif %}
             {% block body %}{% endblock %}

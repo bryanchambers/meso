@@ -4,10 +4,18 @@
     <div id='item' class='inner-wrapper'>
 
         <div id='name'>
-            <a id='back' href='/sprints/{{ item.sprint.id }}' title='Back'><span class="oi oi-chevron-left"></span></a>
+            <a id='back' href='/sprints/{{ item.sprint.id }}' title='Back'>
+                <span class="oi oi-chevron-left"></span>
+            </a>
+
             {{ item.name|truncate(150) }}
-            <a id='edit' href='/items/{{ item.id }}/edit' title='Edit'><span class="oi oi-pencil"></span></a>
+
+            <a id='edit' href='/items/{{ item.id }}/edit' title='Edit'>
+                <span class="oi oi-pencil"></span>
+            </a>
         </div>
+
+
 
         <table id='details'>
             <tr title="Created by {{ item.created_by.name }} on {{ item.created.strftime('%m/%d/%Y') }}">

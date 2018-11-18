@@ -15,17 +15,32 @@
                 <th></th>
             </tr>
 
+
+
             {% for sprint in sprints %}
-                <tr>
-                    <td style='width: 30px'><a href='/sprints/{{ sprint.id }}/select'><span class="oi oi-bolt" title='Select'></span></a></td>
+                <tr class='sprint-row'>
+                    <td class='select'>
+                        <a href='/sprints/{{ sprint.id }}/select'>
+                            <span class="oi oi-bolt" title='Select'></span>
+                        </a>
+                    </td>
+
                     <td><a href='/sprints/{{ sprint.id }}'>{{ sprint.name }}</a></td>
+
                     <td class='text-center'>{{ sprint.start.strftime('%m/%d/%Y') }}</td>
                     <td class='text-center'>{{ sprint.end.strftime('%m/%d/%Y') }}</td>
                     <td class='text-center'>{{ sprint.items|length }}</td>
+
                     <td>{% if sprint.desc %} {{ sprint.desc|truncate(70) }} {% endif %}</td>
-                    <td style='width: 80px'>
-                        <a href='/sprints/{{ sprint.id }}/edit'><span class="oi oi-pencil mr-3" title='Edit Sprint'></span></a>
-                        <a href='/sprints/{{ sprint.id }}/delete'><span class="oi oi-trash" title='Delete Sprint'></span></a>
+
+                    <td class='controls'>
+                        <a href='/sprints/{{ sprint.id }}/edit'>
+                            <span class="oi oi-pencil mr-3" title='Edit Sprint'></span>
+                        </a>
+
+                        <a href='/sprints/{{ sprint.id }}/delete'>
+                            <span class="oi oi-trash" title='Delete Sprint'></span>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}

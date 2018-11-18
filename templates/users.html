@@ -13,19 +13,21 @@
                     <th>Username</th>
                     <th>Created</th>
                     <th>Assigned</th>
-                    <th>Password</th>
+                    <th>Temp Password</th>
                     <th></th>
                 </tr>
 
-                {% for user in users %}
-                    <tr class='text-center'>
-                        <td>{{ user.name }}</td>
-                        <td class='text-center'>{{ user.username }}</td>
-                        <td class='text-center'>{{ user.created_items|length }}</td>
-                        <td class='text-center'>{{ user.assigned_items|length }}</td>
-                        <td class='text-center'>{{ user.temp_pw }}</td>
 
-                        <td style='width: 100px'>
+                {% for user in users %}
+                    <tr class='user-row text-center'>
+
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.created_items|length }}</td>
+                        <td>{{ user.assigned_items|length }}</td>
+                        <td>{{ user.temp_pw }}</td>
+
+                        <td class='controls'>
                             <a href='/users/{{ user.id }}/reset'>
                                 <span class="oi oi-reload mr-2" title='Reset Password'></span>
                             </a>
@@ -40,9 +42,12 @@
                         </td>
                     </tr>
                 {% endfor %}
+
             </table>
+
         {% else %}
             <div id='no-data'>No users yet</div>
         {% endif %}
+
     </div>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 {% block body %}
     <form action='' method='post' class='form'>
+
         <div class='form-group'>
             <label class='input-label'>Name</label>
 
@@ -11,6 +12,7 @@
                 {% endif %}
             >
         </div>
+
 
         <div class='form-group'>
             <label class='input-label'>Start Date</label>
@@ -24,6 +26,7 @@
             >
         </div>
 
+
         <div class='form-group'>
             <label class='input-label'>End Date</label>
 
@@ -36,15 +39,18 @@
             >
         </div>
 
+
         <div class='form-group'>
             <label class='input-label'>Description</label>
-            
+
             <textarea name='desc' type='text' class='form-control' rows='3'>{% if sprint %}{{ sprint.desc }}{% endif %}</textarea>
         </div>
+
 
         <div class='text-center'>
             <button name='submit' type='submit' class='btn btn-primary m-2'>Save</button>
             <a class='btn btn-cancel m-2' href='/sprints'>Cancel</a>
         </div>
+
     </form>
 {% endblock %}
