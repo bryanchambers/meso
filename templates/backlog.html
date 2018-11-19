@@ -15,23 +15,19 @@
                     <th></th>
                 </tr>
 
-
                 {% for item in items %}
                     <tr>
                         <td title="{% if item.desc %}{{ item.desc|truncate(150) }}{% else %}No notes{% endif %}">
                             {{ item.name|truncate(100) }}
                         </td>
 
-
                         <td class='text-center'>
                             {% if item.created %} {{ item.created.strftime('%m/%d/%Y') }} {% endif %}
                         </td>
 
-
                         <td class='text-center'>
                             {% if item.created_by %} {{ item.created_by.name.split()[0] }} {% endif %}
                         </td>
-
 
                         <td style='width: 100px;'>
                             <a href='/items/{{ item.id }}/activate'>
@@ -49,7 +45,6 @@
                     </tr>
                 {% endfor %}
             </table>
-
 
         {% else %}
             <div id='no-data'>No items yet</div>

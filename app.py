@@ -50,14 +50,16 @@ class Comment(db.Model):
 
 class User(db.Model):
     id       = db.Column(db.Integer, primary_key=True)
-    name     = db.Column(db.String(50))
-    username = db.Column(db.String(50))
+    name     = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(100))
     temp_pw  = db.Column(db.String(20))
     comments       = db.relationship('Comment', backref='created_by',  lazy=True, foreign_keys='Comment.created_by_id')
     created_items  = db.relationship('Item',    backref='assigned_to', lazy=True, foreign_keys='Item.assigned_to_id')
     assigned_items = db.relationship('Item',    backref='created_by',  lazy=True, foreign_keys='Item.created_by_id')
     selected_sprint_id = db.Column(db.Integer, db.ForeignKey('sprint.id'))
+    sheriff = db.Column(db.Boolean, default=False)
+    admin   = db.Column(db.Boolean, default=False)
 
 
 
@@ -84,11 +86,13 @@ def home():
 
 @app.before_request
 def check_user():
+    endpt = request.endpoint
+
     if 'user' in session:
-        if 'change_pw' in session and request.endpoint not in ['change_password', 'logout']:
+        if 'change_pw' in session and endpt not in ['change_password', 'logout', 'static']:
             return redirect('users/' + str(session['user']['id']) + '/change')
 
-    elif request.endpoint != 'login':
+    elif endpt != 'login' and endpt != 'static':
         return redirect('/login')
 
 
@@ -109,21 +113,18 @@ def new_item():
     if 'submit' in request.form:
         name = request.form['name']
         desc = request.form['desc'] if request.form['desc'] else None
-        created_by_id  = session['user']['id']       if 'user'   in session else None
+        created_by_id  = session['user']['id']
         assigned_to_id = int(request.form['user'])   if 'user'   in request.form and request.form['user']   else None
         sprint_id      = int(request.form['sprint']) if 'sprint' in request.form and request.form['sprint'] else None
 
+        if not session['user']['sheriff'] and not session['user']['admin']:
+            assigned_to_id = None
+            sprint_id = None
+
         if name:
-            item = Item(
-                name = name,
-                status    = 'Pending',
-                sprint_id =  sprint_id,
-                created   =  datetime.utcnow(),
-                created_by_id = created_by_id,
-                assigned_to_id = assigned_to_id,
-                desc = desc
-            )
+            item = Item(name=name, status='Pending', sprint_id=sprint_id, created=datetime.utcnow(), created_by_id=created_by_id, assigned_to_id=assigned_to_id, desc=desc)
             db.session.add(item)
+
             db.session.commit()
             return redirect('/backlog')
 
@@ -185,6 +186,9 @@ def select_sprint(id):
 
 @app.route('/sprints/new', methods=['GET', 'POST'])
 def new_sprint():
+    if not session['user']['sheriff'] and not session['user']['admin']:
+        return redirect('/sprints')
+
     latest = Sprint.query.order_by(Sprint.end.desc()).first()
 
     if 'submit' in request.form:
@@ -226,6 +230,9 @@ def overlap(start, end):
 
 @app.route('/sprints/<int:id>/edit', methods=['GET', 'POST'])
 def edit_sprint(id):
+    if not session['user']['sheriff'] and not session['user']['admin']:
+        return redirect('/sprints')
+
     sprint = Sprint.query.get(id)
 
     if 'submit' in request.form:
@@ -252,6 +259,9 @@ def edit_sprint(id):
 
 @app.route('/sprints/<int:id>/delete', methods=['GET', 'POST'])
 def delete_sprint(id):
+    if not session['user']['sheriff'] and not session['user']['admin']:
+        return redirect('/sprints')
+
     sprint = Sprint.query.get(id)
     
     if 'submit' in request.form:
@@ -287,10 +297,11 @@ def item(id):
 
 @app.route('/items/<int:id>/activate')
 def activate_item(id):
-    if 'sprint' in session:
-        item = Item.query.get(id)
-        item.sprint_id = session['sprint']['id']
-        db.session.commit()
+    if session['user']['sheriff'] or session['user']['admin']:
+        if 'sprint' in session:
+            item = Item.query.get(id)
+            item.sprint_id = session['sprint']['id']
+            db.session.commit()
 
     return redirect('/backlog')
 
@@ -301,6 +312,10 @@ def activate_item(id):
 @app.route('/items/<int:id>/edit', methods=['GET', 'POST'])
 def edit_item(id):
     item = Item.query.get(id)
+
+    if item.sprint_id or item.created_by.id != session['user']['id']:
+        if not session['user']['sheriff'] and not session['user']['admin']:
+            return redirect('/backlog')
 
     if 'submit' in request.form:
         name    = request.form['name']
@@ -327,7 +342,11 @@ def edit_item(id):
 @app.route('/items/<int:id>/delete', methods=['GET', 'POST'])
 def delete_item(id):
     item = Item.query.get(id)
-    
+
+    if item.sprint_id or item.user.id != session['user']['id']:
+        if not session['user']['sheriff'] and not session['user']['admin']:
+            return redirect('/backlog')
+
     if 'submit' in request.form:
         db.session.delete(item)
         db.session.commit()
@@ -379,13 +398,14 @@ def promote_item(id):
 
 @app.route('/items/<int:id>/backlog')
 def backlog_item(id):
-    item        = Item.query.get(id)
-    sprint_id   = item.sprint_id
+    item = Item.query.get(id)
+    sprint_id = item.sprint_id
 
-    item.status = STATUS_LIST[0]
-    item.sprint_id = None
+    if session['user']['sheriff'] or session['user']['admin']:
+        item.status = STATUS_LIST[0]
+        item.sprint_id = None
+        db.session.commit()
 
-    db.session.commit()
     return redirect('/sprints/' + str(sprint_id))
 
 
@@ -410,7 +430,7 @@ def login():
                     if hash.pbkdf2_sha256.verify(password, user.password): auth = True
             
             if auth:
-                session['user'] = { 'id': user.id, 'name': user.name, 'username': user.username }
+                session['user'] = { 'id': user.id, 'name': user.name, 'username': user.username, 'sheriff': user.sheriff, 'admin': user.admin }
                 if user.temp_pw: session['change_pw'] = True 
 
                 return redirect('/')
@@ -442,6 +462,8 @@ def profile():
 
 @app.route('/users/new', methods=['GET', 'POST'])
 def new_user():
+    if not session['user']['admin']: return redirect('/profile')
+
     if 'submit' in request.form:
         name     = request.form['name']     if request.form['name']     else None 
         username = request.form['username'] if request.form['username'] else None
@@ -465,6 +487,8 @@ def new_user():
 
 @app.route('/users/<int:id>/reset')
 def reset_password(id):
+    if not session['user']['admin']: return redirect('/profile')
+
     user = User.query.get(id)
 
     user.temp_pw  = pwd.genword(length=12, charset='ascii_50')
@@ -545,6 +569,9 @@ def valid_password(pw):
 
 @app.route('/users/<int:id>/edit', methods=['GET', 'POST'])
 def edit_user(id):
+    if id != session['user']['id']:
+        if not session['user']['admin']: return redirect('/profile')
+
     user = User.query.get(id)
 
     if 'submit' in request.form:
@@ -569,6 +596,8 @@ def edit_user(id):
 
 @app.route('/users')
 def users():
+    if not session['user']['admin']: return redirect('/profile')
+
     users = User.query.all()
     return render_template('users.html', title='Users', users=users)
 
@@ -578,6 +607,8 @@ def users():
 
 @app.route('/users/<int:id>/delete', methods=['GET', 'POST'])
 def delete_user(id):
+    if not session['user']['admin']: return redirect('/profile')
+
     user = User.query.get(id)
 
     if 'submit' in request.form:

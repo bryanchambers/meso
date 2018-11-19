@@ -1,4 +1,4 @@
 CREATE TABLE sprint(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, start INTEGER, end INTEGER);
 CREATE TABLE item(id INTEGER PRIMARY KEY, name TEXT, status TEXT, sprint_id INTEGER, assigned_to_id INTEGER, desc TEXT, created INTEGER, created_by_id INTEGER)
-CREATE TABLE user(id INTEGER PRIMARY KEY, name TEXT, username TEXT, password TEXT, temp_pw TEXT, selected_sprint_id INTEGER)
+CREATE TABLE user(id INTEGER PRIMARY KEY, name TEXT, username TEXT, password TEXT, temp_pw TEXT, selected_sprint_id INTEGER, sheriff BOOLEAN, admin BOOLEAN)
 CREATE TABLE comment(id INTEGER PRIMARY KEY, txt TEXT, item_id INTEGER, created INTEGER, created_by_id INTEGER)
