@@ -99,6 +99,14 @@ def check_user():
 
 
 
+@app.context_processor
+def inject_date():
+    return {'today': datetime.now() }
+
+
+
+
+
 @app.route('/backlog')
 def backlog():
     items = Item.query.filter_by(sprint_id=None).order_by(Item.created.desc()).all()
@@ -343,7 +351,7 @@ def edit_item(id):
 def delete_item(id):
     item = Item.query.get(id)
 
-    if item.sprint_id or item.user.id != session['user']['id']:
+    if item.sprint_id or item.created_by.id != session['user']['id']:
         if not session['user']['sheriff'] and not session['user']['admin']:
             return redirect('/backlog')
 

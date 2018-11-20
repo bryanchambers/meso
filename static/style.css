@@ -1,181 +1,255 @@
 #wrapper {
-    width: 85%;
+    width:  85%;
     margin: 0px auto 100px;
 }
 
+
 .inner-wrapper {
-    width: 100%;
     margin: 0px auto;
+    width:  100%;
     max-width: 700px;
 }
 
+
 body {
-	background: #1a1a1a;
-	color: #d9d9d9;
+    background: #1a1a1a;
+    color:      #d9d9d9;
 }
+
 
 ::-webkit-scrollbar       { width: 7px; }
 ::-webkit-scrollbar-track { background: #262626; }
 ::-webkit-scrollbar-thumb { background: #333333; }
 
+
 .btn       { opacity: 0.4; }
 .btn:hover { opacity: 1;   }
 
 
-#item #name {
-    text-align: center;
-    font-size: 25px;
-    margin-top: 30px;
-    background: #1f1f1f;
-    padding: 7px 50px;
-    border-radius: 3px;
-    position: relative;
+.btn-cancel, .btn-cancel:hover {
+    background: #333333;
+    color:      #d9d9d9 !important;
 }
 
-#item #name:hover a {
-    opacity: 1;
+
+.text-link       { color: #d9d9d9; }
+.text-link:hover { color: #007bff; text-decoration: none; }
+
+
+
+
+
+
+
+
+
+#menu-left, #menu-right {
+    position: fixed;
+    top: 10px;
 }
+
+
+#menu-left  { left:  15px; }
+#menu-right { right: 15px; }
+
+
+.info {
+    position: relative;
+    top: -1px;
+    color: #666666;
+}
+
+
+.info:hover { color: #b3b3b3;}
+
+
+#menu-left  .info { right: -10px; }
+#menu-right .info { right:  10px; }
+
+
+#today {
+    position: fixed;
+    bottom: 5px;
+    left:   10px;
+    color: #666666;
+}
+
+
+
+
+
+
+
+
+
+
+#date-range { color: #b3b3b3; }
+
+
+#item #name {
+    position: relative;
+    background: #1f1f1f;
+    margin-top: 30px;
+    padding:    7px 50px;
+    text-align: center;
+    font-size:  25px;
+    border-radius: 3px;
+}
+
 
 #item #name a {
-    font-size: 16px;
     position: absolute;
     top: 15px;
-    opacity: 0.3;
+    font-size: 16px;
+    opacity:   0.3;
 }
 
 
-#item #name #back {
-    left: 10px;
-}
+#item #name:hover a { opacity: 1; }
 
-#item #name #edit {
-    right: 10px;
-}
 
-#details {
-    margin: 30px auto;
-}
+#item #name #back { left: 10px; }
+#item #name #edit { right: 10px; }
+
+
+
+
+
+
+
+
+
+
+#details { margin: 30px auto; }
 
 
 #details td {
     padding: 5px;
-    border: none !important;
+    border:  none !important;
 }
+
 
 #details .label {
     text-align: right;
-    font-size: 14px;
+    font-size:  14px;
     color: #666666;
 }
 
-#details .secondary {
-    color: #666666;
-}
 
+#details .secondary { color: #666666; }
 
 
 #item #desc #text {
     background: #262626;
+    color:      #b3b3b3;
     padding: 7px 10px;
-    color: #b3b3b3;
     border-radius: 3px;
 }
 
 
 
-#item #comments {
-    margin: 150px 0px;
-}
+
+
+
+
+
+
+
+#item #comments { margin: 150px 0px; }
+
 
 #item #comments #header {
     color: #666666;
-    font-size: 20px;
+    font-size:  20px;
     text-align: center;
 }
 
 
-
-
-
-
-
-#item #comments #thread {
-    /* padding-right: 15px; */
-    margin: 15px 0px 0px;
-    /* border: 1px solid #333333; */
-    /* border-radius: 5px; */
-    /* max-height: 300px; */
-    /* overflow-y: auto; */
-}
+#item #comments #thread { margin: 15px 0px 0px; }
 
 
 #item #comments #thread .info {
     font-size: 12px;
-    padding: 3px 5px;
+    padding:   3px 5px;
 }
+
 
 #item #comments #thread .name {
     font-size: 14px;
-    opacity: 0.8;
+    opacity:   0.8;
 }
+
 
 #item #comments #thread .date {
     float: right;
     color: #666666;
 }
 
+
 #item #comments #thread .text {
-    /* display: inline-block; */
     background: #262626;
-    margin-bottom: 40px;
-    padding: 7px 10px;
-    border-radius: 3px;
-    color: #b3b3b3;
+    color:      #b3b3b3;
     font-size: 14px;
+    padding:   7px 10px;
+    margin-bottom: 40px;
+    border-radius: 3px;
 }
 
 
 #item #comments #new {
     max-width: 700px;
-	margin: 0px auto;
+    margin: 0px auto;
 }
+
 
 #item #comments #new textarea {
     font-size: 14px;
     resize: none;
 }
 
-#item #comments #new button {
-    opacity: 0.3;
-}
-#item #comments #new button:hover {
-    opacity: 0.9;
-}
+
+#item #comments #new button       { opacity: 0.3; }
+#item #comments #new button:hover { opacity: 0.9; }
+
+
+
+
+
+
+
 
 
 
 .form {
-	max-width: 700px;
-	margin: 50px auto;
+    max-width: 700px;
+    margin: 50px auto;
 }
 
-.form-group {
-	margin: 30px auto;
-}
+
+.form-group { margin: 30px auto; }
 
 
 input, select, textarea {
     background:#1f1f1f !important;
-    color: #d9d9d9 !important;
+    color:     #d9d9d9 !important;
     border: 1px solid #333333 !important;
 }
 
 
 .input-label {
-	font-size: 16px;
-	color: #666666;
-	margin: 3px 5px;
+    margin: 3px 5px;
+    font-size: 16px;
+    color: #666666;
 }
+
+
+
+
+
+
+
+
+
 
 .card {
     margin: 20px auto;
@@ -202,93 +276,66 @@ input, select, textarea {
     border-radius: 0px 0px 3px 3px;
 }
 
-.desc {
-    font-size: 14px;
-}
+.card-body .item-text { font-size: 14px; }
 
 
+.card-body .oi       { opacity: 0; }
+.card-body:hover .oi { opacity: 0.5; }
 
-.card-body .oi, .card-header .oi {
-    opacity: 0;
-}
 
-.card-body:hover .oi, .card-header:hover .oi {
-    opacity: 0.5;
-}
-
-.current {
+.assigned-to {
+    color: #666666;
+    font-size:   12px;
     font-weight: bold;
-    font-size: 12px;
 }
 
-.status {
-    font-size: 20px;
-    /* line-height: 40px; */
-}
+
+
+
+
+
+
+
+
+
+.status { font-size: 20px; }
+
 
 .count {
     font-size: 20px;
-    font-weight: normal;
     margin-right: 5px;
-    padding: 5px;
-    border-radius: 3px;
-}
-
-.user {
-    float: right;
+    padding:      5px;
 }
 
 
 
-#menu-left, #menu-right {
-    position: fixed;
-    top: 10px;
-}
-#menu-left { left: 15px; }
-#menu-right { right: 15px; }
+
+
+
+
+
+
 
 #table-wrapper {
-    width: 100%;
-    max-width: 1200px;
     margin: 0px auto 100px;
+    width:  100%;
+    max-width: 1200px;
 }
 
 
-tr:hover {
-    background: #1f1f1f;
-}
+td, th { border-bottom: 1px solid #333333 !important; }
+th     { border-top:    1px solid #333333 !important; }
 
 
-tr .oi {
-    visibility: hidden;
-}
-
-tr:hover .oi {
-    visibility: visible;
-}
-
-.btn-cancel, btn-cancel:hover {
-    background: #333333;
-    color: #d9d9d9 !important;
-}
+tr:hover { background: #1f1f1f; }
 
 
+tr .oi       { visibility: hidden; }
+tr:hover .oi { visibility: visible; }
 
-#del {
-    font-weight: bold;
-    font-style: italic;
-}
 
 #no-data {
     color: #999999;
     text-align: center;
-    font-size: 18px;
-}
-
-td, th {
-    border-bottom: 1px solid #333333 !important;
-}
-
-th {
-    border-top: 1px solid #333333 !important;
+    font-size:  18px;
 }

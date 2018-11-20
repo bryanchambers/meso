@@ -34,15 +34,15 @@
 
                             <div class='card-body'>
 
-                                <div class='desc'>
-                                    {{ item.name|truncate(150) }}
+                                <a class='text-link' href='/items/{{ item.id }}'>
+                                    <div class='item-text'>
+                                        <span class='mr-2'>{{ item.name|truncate(150) }}</span>
 
-                                    {% if item.assigned_to %}
-                                        <span class='assigned-to'>
-                                            &ndash;{{ item.assigned_to.name.split()[0].upper() }}
-                                        </span>
-                                    {% endif %}
-                                </div>
+                                        {% if item.assigned_to %}
+                                            <span class='assigned-to'>{{ item.assigned_to.name.split()[0].upper() }}</span>
+                                        {% endif %}
+                                    </div>
+                                </a>
 
                                 <div class='controls text-center mt-2'>
                                     <a class='float-left {% if status_loop.index < 2 %} invisible {% endif %}' href='/items/{{ item.id }}/demote'>

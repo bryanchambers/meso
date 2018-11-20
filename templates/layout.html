@@ -29,6 +29,8 @@
             <a href='/logout'><span  class="oi oi-power-standby m-1" title='Logout'></span></a>
         </div>
 
+        <div id='today'>Today is {{ today.strftime('%A, %b %d, %Y') }}</div>
+
         <div class='container-fluid' id='wrapper'>
             {% if title %} <h2 id='title' class='text-center m-4'>{{ title }}</h2> {% endif %}
             {% block body %}{% endblock %}
