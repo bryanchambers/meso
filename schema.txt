@@ -15,7 +15,8 @@ CREATE TABLE item(
     assigned_to_id INT,
     description    VARCHAR(500),
     created        DATETIME NOT NULL,
-    created_by_id  INT NOT NULL)
+    created_by_id  INT NOT NULL
+)
 
 
 CREATE TABLE user(

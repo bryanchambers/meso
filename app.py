@@ -8,9 +8,7 @@ from passlib  import pwd, hash
 app = Flask(__name__)
 app.secret_key = 'tGtkxe9Zujgsz3DMx2Xa3c69ykkwAC2GhmH2'
 
-db_config = open('db.txt', 'r')
-app.config['SQLALCHEMY_DATABASE_URI'] = db_config.read()
-
+app.config['SQLALCHEMY_DATABASE_URI'] = app.open_resource('db.txt').read().decode('ascii')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
