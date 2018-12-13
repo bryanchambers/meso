@@ -6,14 +6,15 @@ from random   import randint
 from passlib  import pwd, hash
 
 app = Flask(__name__)
-app.debug = True
 app.secret_key = 'tGtkxe9Zujgsz3DMx2Xa3c69ykkwAC2GhmH2'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://evelazquez:DMvTgYmfAvYG@54.188.149.9/meso'
+db_config = open('db.txt', 'r')
+app.config['SQLALCHEMY_DATABASE_URI'] = db_config.read()
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
+app.debug = True
 
 
 
