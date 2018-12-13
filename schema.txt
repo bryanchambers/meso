@@ -1,4 +1,39 @@
-CREATE TABLE sprint(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, start INTEGER, end INTEGER)
-CREATE TABLE item(id INTEGER PRIMARY KEY, name TEXT, status TEXT, sprint_id INTEGER, assigned_to_id INTEGER, desc TEXT, created INTEGER, created_by_id INTEGER)
-CREATE TABLE user(id INTEGER PRIMARY KEY, name TEXT, username TEXT, password TEXT, temp_pw TEXT, selected_sprint_id INTEGER, sheriff BOOLEAN, admin BOOLEAN)
-CREATE TABLE comment(id INTEGER PRIMARY KEY, txt TEXT, item_id INTEGER, created INTEGER, created_by_id INTEGER)
+CREATE TABLE sprint(
+    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name        VARCHAR(50) NOT NULL,
+    description VARCHAR(500),
+    start       DATETIME NOT NULL,
+    end         DATETIME NOT NULL
+)
+
+
+CREATE TABLE item(
+    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name           VARCHAR(50) NOT NULL,
+    status         VARCHAR(50),
+    sprint_id      INT,
+    assigned_to_id INT,
+    description    VARCHAR(500),
+    created        DATETIME NOT NULL,
+    created_by_id  INT NOT NULL)
+
+
+CREATE TABLE user(
+    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name     VARCHAR(50) NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(100),
+    temp_pw  VARCHAR(20),
+    selected_sprint_id INT,
+    sheriff  BOOLEAN,
+    admin    BOOLEAN
+)
+
+
+CREATE TABLE comment(
+    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    txt     VARCHAR(500) NOT NULL,
+    item_id INT NOT NULL,
+    created DATETIME NOT NULL,
+    created_by_id INT NOT NULL
+)

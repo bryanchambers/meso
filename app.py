@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.debug = True
 app.secret_key = 'tGtkxe9Zujgsz3DMx2Xa3c69ykkwAC2GhmH2'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////var/www/meso/database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://evelazquez:DMvTgYmfAvYG@54.188.149.9/meso'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -20,7 +20,7 @@ db = SQLAlchemy(app)
 class Sprint(db.Model):
     id    = db.Column(db.Integer, primary_key=True)
     name  = db.Column(db.String(50))
-    desc  = db.Column(db.String(500))
+    description = db.Column(db.String(500))
     start = db.Column(db.DateTime)
     end   = db.Column(db.DateTime)
     items = db.relationship('Item', backref='sprint', lazy=True)
@@ -28,19 +28,19 @@ class Sprint(db.Model):
 
 
 class Item(db.Model):
-    id        = db.Column(db.Integer, primary_key=True)
-    status    = db.Column(db.String(50))
-    sprint_id = db.Column(db.Integer, db.ForeignKey('sprint.id'))
-    name      = db.Column(db.String(50))
-    desc      = db.Column(db.String(500))
-    created   = db.Column(db.DateTime)
+    id = db.Column(db.Integer, primary_key=True)
+    status      = db.Column(db.String(50))
+    sprint_id   = db.Column(db.Integer, db.ForeignKey('sprint.id'))
+    name        = db.Column(db.String(50))
+    description = db.Column(db.String(500))
+    created     = db.Column(db.DateTime)
     created_by_id  = db.Column(db.Integer, db.ForeignKey('user.id'))
     assigned_to_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 
 class Comment(db.Model):
-    id      = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
     txt     = db.Column(db.String(500))
     created = db.Column(db.DateTime)
@@ -130,7 +130,7 @@ def new_item():
             sprint_id = None
 
         if name:
-            item = Item(name=name, status='Pending', sprint_id=sprint_id, created=datetime.utcnow(), created_by_id=created_by_id, assigned_to_id=assigned_to_id, desc=desc)
+            item = Item(name=name, status='Pending', sprint_id=sprint_id, created=datetime.utcnow(), created_by_id=created_by_id, assigned_to_id=assigned_to_id, description=desc)
             db.session.add(item)
 
             db.session.commit()
@@ -207,7 +207,7 @@ def new_sprint():
 
         if name and start and end:
             if end > start and not overlap(start, end):
-                sprint = Sprint(name=name, start=start, end=end, desc=desc)
+                sprint = Sprint(name=name, start=start, end=end, description=desc)
 
                 db.session.add(sprint)
                 db.session.commit()
@@ -254,7 +254,7 @@ def edit_sprint(id):
                 sprint.name  = name
                 sprint.start = start
                 sprint.end   = end
-                sprint.desc  = desc
+                sprint.description = desc
 
                 db.session.commit()
                 return redirect('/sprints')
@@ -336,7 +336,7 @@ def edit_item(id):
             item.assigned_to_id = assigned_to_id
             redirect_url   = '/sprints/' + str(item.sprint_id) if item.sprint_id else '/backlog'
             item.sprint_id = sprint_id
-            item.desc = desc
+            item.description = desc
 
             db.session.commit()
             return redirect(redirect_url)
