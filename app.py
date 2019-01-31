@@ -18,8 +18,8 @@ app.debug = True
 
 class Sprint(db.Model):
     id    = db.Column(db.Integer, primary_key=True)
-    name  = db.Column(db.String(50))
-    description = db.Column(db.String(500))
+    name  = db.Column(db.String(150))
+    description = db.Column(db.String(1000))
     start = db.Column(db.DateTime)
     end   = db.Column(db.DateTime)
     items = db.relationship('Item', backref='sprint', lazy=True)
@@ -30,8 +30,8 @@ class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     status      = db.Column(db.String(50))
     sprint_id   = db.Column(db.Integer, db.ForeignKey('sprint.id'))
-    name        = db.Column(db.String(50))
-    description = db.Column(db.String(500))
+    name        = db.Column(db.String(250))
+    description = db.Column(db.String(1000))
     created     = db.Column(db.DateTime)
     created_by_id  = db.Column(db.Integer, db.ForeignKey('user.id'))
     assigned_to_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -41,7 +41,7 @@ class Item(db.Model):
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
-    txt     = db.Column(db.String(500))
+    txt     = db.Column(db.String(1000))
     created = db.Column(db.DateTime)
     created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 

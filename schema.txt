@@ -1,7 +1,7 @@
 CREATE TABLE sprint(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    name        VARCHAR(50) NOT NULL,
-    description VARCHAR(500),
+    name        VARCHAR(150) NOT NULL,
+    description VARCHAR(1000),
     start       DATETIME NOT NULL,
     end         DATETIME NOT NULL
 )
@@ -9,11 +9,11 @@ CREATE TABLE sprint(
 
 CREATE TABLE item(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    name           VARCHAR(50) NOT NULL,
+    name           VARCHAR(250) NOT NULL,
     status         VARCHAR(50),
     sprint_id      INT,
     assigned_to_id INT,
-    description    VARCHAR(500),
+    description    VARCHAR(1000),
     created        DATETIME NOT NULL,
     created_by_id  INT NOT NULL
 )
@@ -33,7 +33,7 @@ CREATE TABLE user(
 
 CREATE TABLE comment(
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    txt     VARCHAR(500) NOT NULL,
+    txt     VARCHAR(1000) NOT NULL,
     item_id INT NOT NULL,
     created DATETIME NOT NULL,
     created_by_id INT NOT NULL
