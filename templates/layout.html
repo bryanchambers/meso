@@ -17,8 +17,16 @@
             <a href='/'><span class="oi oi-home m-1" title='Selected Sprint'></span></a>
             <a href='/sprints'><span class="oi oi-spreadsheet m-1" title='All Sprints'></span></a>
             <a href='/backlog'><span class="oi oi-briefcase m-1" title='Backlog'></span></a>
+            <a href='/backlog/new'><span class="oi oi-plus m-1" title='New Item'></span></a>
 
             {% if 'sprint' in session %} <span class='info'>{{ session['sprint']['name'] }}</span> {% endif %}
+        </div>
+
+        <div id='quick-add'>
+            <form action='/backlog/quick' method='post'>
+                <button name='submit' type='submit'>Save</button>
+                <input name='name' type='text' class='form-control' autocomplete='off' placeholder='Quick add'>
+            </form>
         </div>
 
         <div id='menu-right'>

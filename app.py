@@ -141,6 +141,57 @@ def new_item():
 
 
 
+
+@app.route('/backlog/bulk', methods=['GET', 'POST'])
+def bulk_add():
+    if 'submit' in request.form:
+        names = request.form['names']
+
+        created_by_id  = session['user']['id']
+        assigned_to_id = int(request.form['user'])   if 'user'   in request.form and request.form['user']   else None
+        sprint_id      = int(request.form['sprint']) if 'sprint' in request.form and request.form['sprint'] else None
+
+        if not session['user']['sheriff'] and not session['user']['admin']:
+            assigned_to_id = None
+            sprint_id = None
+
+        if names:
+            names = names.split('\r\n')
+
+            for name in names:
+                if name:
+                    item = Item(name=name, status='Pending', sprint_id=sprint_id, created=datetime.utcnow(), created_by_id=created_by_id, assigned_to_id=assigned_to_id, description=None)
+                    db.session.add(item)
+
+            db.session.commit()
+            return redirect('/backlog')
+
+    return render_template('edit-item.html', title='Bulk Add', bulk=True, sprints=Sprint.query.all(), users=User.query.all())
+
+
+
+
+
+@app.route('/backlog/quick', methods=['GET', 'POST'])
+def quick_add():
+    if 'submit' in request.form:
+        print(request.form)
+        name = request.form['name']
+        created_by_id = session['user']['id']
+
+        if name:
+            item = Item(name=name, status='Pending', sprint_id=None, created=datetime.utcnow(), created_by_id=created_by_id, assigned_to_id=None, description=None)
+            db.session.add(item)
+
+            db.session.commit()
+            return redirect('/')
+
+    return redirect('/')
+
+
+
+
+
 @app.route('/sprints')
 def sprints():
     sprints = Sprint.query.order_by(Sprint.start.desc()).all()
